@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ExpedienteSaludDigitalAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,11 +14,49 @@ namespace ExpedienteSaludDigitalAPI.Controllers
     [ApiController]
     public class CitaController : ControllerBase
     {
+
+        public IConfiguration Configuration { get; set; }
+
+        public CitaController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         // GET: api/<CitaController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public List<CitaModel> Get()
         {
-            return new string[] { "value1", "value2" };
+
+            List<CitaModel> listaCitas = new List<CitaModel>();
+            if (ModelState.IsValid)
+            {
+                string connectionString = Configuration["ConnectionStrings:DB_Connection_Turrialba"];
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string sqlQuery = $"exec sp_getAllCitas";
+                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                    {
+                        command.CommandType = CommandType.Text;
+                        connection.Open();
+                        SqlDataReader sqlDataReader = command.ExecuteReader();
+                        while (sqlDataReader.Read())
+                        {
+                            CitaModel citas = new CitaModel();
+                            citas.ID_Cita = Int32.Parse(sqlDataReader["ID"].ToString());
+                            citas.CedulaPaciente = sqlDataReader["CEDULA_PACIENTE"].ToString();
+                            citas.Fecha = sqlDataReader["FECHA"].ToString();
+                            citas.Hora = sqlDataReader["HORA"].ToString();
+                            citas.CentroSalud = Int32.Parse(sqlDataReader["ID_CENTRO_SALUD"].ToString());
+                            citas.Especialidad = Int32.Parse(sqlDataReader["ESPECIALIDAD"].ToString());
+                            citas.Diagnostico = sqlDataReader["DESCRIPCION_DETALLADA"].ToString();
+                            listaCitas.Add(citas);
+                        }
+                    }
+                }
+
+            }
+            return listaCitas;
         }
 
         // GET api/<CitaController>/5
