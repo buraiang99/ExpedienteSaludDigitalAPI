@@ -17,7 +17,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
             Configuration = configuration;
         }
         //metodo para guirse
-        [HttpPost]
+        /*[HttpPost]
         public IActionResult Registrar(DoctorModel doctorModel)
         {
             if (ModelState.IsValid)
@@ -60,6 +60,6 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                     connection.Close();
                 };
             }
-        }
+        }*/
     }
 }
