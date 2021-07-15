@@ -16,6 +16,8 @@ namespace ExpedienteSaludDigitalAPI.Models
         public string Fecha { get; set; }
         public string Hora { get; set; }
         public string Diagnostico { get; set; }
+        public string NombreDoctor { get; set; }
+        public string ApellidosDoctor { get; set; }
 
         public CitaModel()
         {
