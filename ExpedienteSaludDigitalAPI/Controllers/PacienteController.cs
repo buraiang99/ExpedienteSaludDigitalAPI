@@ -52,7 +52,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string cedula)
+        public void Post([FromBody] string cedula, string estadoCivil)
         {
             if (ModelState.IsValid)
             {
@@ -60,8 +60,8 @@ namespace ExpedienteSaludDigitalAPI.Controllers
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    string sqlQuery = $"exec sp_updatePacienteEstadoCivil @param_CEDULA = {cedula}'";
-                    //$"@param_ESTADO_CIVIL = '{estadoCivil}', ";
+                    string sqlQuery = $"exec sp_updatePacienteEstadoCivil @param_CEDULA = '{cedula}',"+
+                    $"@param_ESTADO_CIVIL = '{estadoCivil}'";
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
                         command.CommandType = CommandType.Text;
