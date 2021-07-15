@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace ExpedienteSaludDigitalAPI.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class PacienteController : Controller
     {
         public IConfiguration Configuration { get; }
@@ -50,7 +52,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string cedula, [FromBody] string estadoCivil)
+        public void Post([FromBody] string cedula)
         {
             if (ModelState.IsValid)
             {
@@ -58,8 +60,8 @@ namespace ExpedienteSaludDigitalAPI.Controllers
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    string sqlQuery = $"exec sp_updatePacienteEstadoCivil @param_CEDULA = {cedula}'," +
-                    $"@param_ESTADO_CIVIL = '{estadoCivil}', ";
+                    string sqlQuery = $"exec sp_updatePacienteEstadoCivil @param_CEDULA = {cedula}'";
+                    //$"@param_ESTADO_CIVIL = '{estadoCivil}', ";
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
                         command.CommandType = CommandType.Text;
