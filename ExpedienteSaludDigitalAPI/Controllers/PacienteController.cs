@@ -44,6 +44,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                             temp.EstadoCivil = sqlDataReader["ESTADO_CIVIL"].ToString();
                             temp.Domicilio = sqlDataReader["DOMICILIO"].ToString();
                         }
+                        connection.Close();
                     }
                 }
 
@@ -51,8 +52,8 @@ namespace ExpedienteSaludDigitalAPI.Controllers
             return temp;
         }
 
-        [HttpPost]
-        public void Post([FromBody] string cedula, string estadoCivil)
+        [HttpPut("{cedula}")]
+        public void Put(string cedula, [FromBody] string estadoCivil)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +63,33 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                 {
                     string sqlQuery = $"exec sp_updatePacienteEstadoCivil @param_CEDULA = '{cedula}',"+
                     $"@param_ESTADO_CIVIL = '{estadoCivil}'";
+                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                    {
+                        command.CommandType = CommandType.Text;
+                        connection.Open();
+                        command.ExecuteReader();
+                        connection.Close();
+                    }
+                }
+
+            }
+        }
+
+        [HttpPost]
+        public void Post([FromBody] string cedula, string nombre, int edad, string tipoSangre, string estadoCivil,int domicilio)
+        {
+            if (ModelState.IsValid)
+            {
+                string connectionString = Configuration["ConnectionStrings:DB_Connection_Turrialba"];
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string sqlQuery = $"exec sp_insertarPaciente @param_CEDULA = '{cedula}'," +
+                    $"@param_NOMBRE ='{nombre}'," +
+                    $"@param_EDAD ='{edad}'," +
+                    $"@param_TIPO_SANGRE ='{tipoSangre}'," +
+                    $"@param_ESTADO_CIVIL ='{estadoCivil}'," +
+                    $"@param_ID_DOMICILIO = '{domicilio}'";
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
                         command.CommandType = CommandType.Text;
