@@ -7,12 +7,12 @@ namespace ExpedienteSaludDigitalAPI.Models
 {
     public class PacienteModel
     {
-        public int Cedula { get; set; }
-        public string Nombre { get; set; }
-        public string Edad { get; set; }
-        public string TipoSangre { get; set; }
-        public string EstadoCivil { get; set; }
-        public string Domicilio { get; set; }
+        public String Cedula { get; set; }
+        public String Nombre { get; set; }
+        public int Edad { get; set; }
+        public String TipoSangre { get; set; }
+        public String EstadoCivil { get; set; }
+        public String Domicilio { get; set; }
 
     } // fin clase
 } // fin namespace

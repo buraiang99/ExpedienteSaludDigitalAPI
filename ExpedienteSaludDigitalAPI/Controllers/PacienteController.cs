@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ExpedienteSaludDigitalAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -16,50 +17,59 @@ namespace ExpedienteSaludDigitalAPI.Controllers
         {
             Configuration = configuration;
         }
-        //metodo para guirse
-        /*[HttpPost]
-        public IActionResult Registrar(DoctorModel doctorModel)
+        [HttpGet("{cedula}")]
+        public PacienteModel Get(String cedula)
+        {
+            PacienteModel temp = new PacienteModel();
+            if (ModelState.IsValid)
+            {
+                string connectionString = Configuration["ConnectionStrings:DB_Connection_Turrialba"];
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string sqlQuery = $"exec sp_getPaciente @param_CEDULA = {cedula}";
+                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                    {
+                        command.CommandType = CommandType.Text;
+                        connection.Open();
+                        SqlDataReader sqlDataReader = command.ExecuteReader();
+                        while (sqlDataReader.Read())
+                        {
+                            temp.Cedula = sqlDataReader["CEDULA"].ToString();
+                            temp.Nombre = sqlDataReader["NOMBRE"].ToString();
+                            temp.Edad = Int32.Parse(sqlDataReader["EDAD"].ToString());
+                            temp.TipoSangre = sqlDataReader["TIPO_SANGRE"].ToString();
+                            temp.EstadoCivil = sqlDataReader["ESTADO_CIVIL"].ToString();
+                            temp.Domicilio = sqlDataReader["DOMICILIO"].ToString();
+                        }
+                    }
+                }
+
+            }
+            return temp;
+        }
+
+        [HttpPost]
+        public void Post([FromBody] string cedula, [FromBody] string estadoCivil)
         {
             if (ModelState.IsValid)
             {
-                string conexionString = Configuration["ConnectionStrings:DB_Connection_Turrialba"];
-                var connection = new SqlConnection(conexionString);
+                string connectionString = Configuration["ConnectionStrings:DB_Connection_Turrialba"];
 
-                string sqlQuery = $"exec sp_insertarDoctor @param_CEDULA = '{doctorModel.Cedula}', " +
-                    $"@param_CODIGO_MEDICO = '{doctorModel.CodigoMedico}', " +
-                    $"@param_PASS = '{doctorModel.Pass}', " +
-                    $"@param_NOMBRE = '{doctorModel.Nombre}', @param_APELLIDOS = '{doctorModel.Apellidos}'";
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    command.CommandType = CommandType.Text;
-                    connection.Open();
-                    command.ExecuteReader();
-                    connection.Close();
-                };
-            }
-            return View("Index");
-
-            [HttpGet]
-            public object Get()
-            {
-                string conexionString = Configuration["ConnectionStrings:DB_Connection_Turrialba"];
-                var connection = new SqlConnection(conexionString);
-                string sqlQuery = $"exec sp_getAllPacientes";
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                {
-                    command.CommandType = CommandType.Text;
-                    connection.Open();
-                    SqlDataReader productosReader = command.ExecuteReader();
-                    while (productosReader.Read())
+                    string sqlQuery = $"exec sp_updatePacienteEstadoCivil @param_CEDULA = {cedula}'," +
+                    $"@param_ESTADO_CIVIL = '{estadoCivil}', ";
+                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
-                        ProductoModel productoTemp = new ProductoModel();
-                        productoTemp.Id = Int32.Parse(productosReader["id"].ToString());
-                        productoTemp.Nombre = productosReader["nombre"].ToString();
-                        productos.Add(productoTemp);
+                        command.CommandType = CommandType.Text;
+                        connection.Open();
+                        command.ExecuteReader();
+                        connection.Close();
                     }
-                    connection.Close();
-                };
+                }
+
             }
-        }*/
+        }
     }
 }
