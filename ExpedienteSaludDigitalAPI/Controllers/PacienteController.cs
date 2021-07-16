@@ -43,6 +43,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                             temp.TipoSangre = sqlDataReader["TIPO_SANGRE"].ToString();
                             temp.EstadoCivil = sqlDataReader["ESTADO_CIVIL"].ToString();
                             temp.Domicilio = sqlDataReader["DOMICILIO"].ToString();
+                            temp.Pass = sqlDataReader["PASS"].ToString();
                         }
                         connection.Close();
                     }
@@ -76,7 +77,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string cedula, string nombre, int edad, string tipoSangre, string estadoCivil,int domicilio)
+        public void Post([FromBody] string cedula, string nombre, int edad, string tipoSangre, string estadoCivil,int domicilio,string pass)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +90,8 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                     $"@param_EDAD ='{edad}'," +
                     $"@param_TIPO_SANGRE ='{tipoSangre}'," +
                     $"@param_ESTADO_CIVIL ='{estadoCivil}'," +
-                    $"@param_ID_DOMICILIO = '{domicilio}'";
+                    $"@param_ID_DOMICILIO = '{domicilio}'," +
+                    $"@param_PASS = '{pass}'";
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
                         command.CommandType = CommandType.Text;

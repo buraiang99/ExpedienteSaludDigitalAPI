@@ -13,6 +13,7 @@ namespace ExpedienteSaludDigitalAPI.Models
         public String TipoSangre { get; set; }
         public String EstadoCivil { get; set; }
         public String Domicilio { get; set; }
+        public String Pass { get; set; }
 
     } // fin clase
 } // fin namespace
