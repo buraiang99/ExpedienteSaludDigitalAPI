@@ -50,10 +50,11 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                             citas.CentroSalud = Int32.Parse(sqlDataReader["ID_CENTRO_SALUD"].ToString());
                             citas.Especialidad = Int32.Parse(sqlDataReader["ESPECIALIDAD"].ToString());
                             citas.Diagnostico = sqlDataReader["DESCRIPCION_DETALLADA"].ToString();
-                            citas.NombreDoctor = "";
-                            citas.ApellidosDoctor = "";
+                            citas.NombreDoctor = " ";
+                            citas.ApellidosDoctor = " ";
                             listaCitas.Add(citas);
                         }
+                        connection.Close();
                     }
                 }
 
@@ -93,6 +94,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                             citas.ApellidosDoctor = sqlDataReader["APELLIDOS_DOCTOR"].ToString();
                             citasModel = citas;
                         }
+                        connection.Close();
                     }
                 }
 
@@ -110,6 +112,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
+
         }
 
         // DELETE api/<CitaController>/5
