@@ -63,8 +63,8 @@ namespace ExpedienteSaludDigitalAPI.Controllers
         }
 
         // GET api/<CitaController>/5
-        [HttpGet("{id}")]
-        public CitaModel Get(int id)
+        [HttpGet("{cedula}")]
+        public CitaModel Get(string cedula)
         {
             CitaModel citasModel = new CitaModel();
             if (ModelState.IsValid)
@@ -73,7 +73,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    string sqlQuery = $"exec sp_bucarCitas @param_ID = {id}";
+                    string sqlQuery = $"exec sp_buscarCitasCedula @param_CEDULA_PACIENTE = {cedula}";
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
                         command.CommandType = CommandType.Text;
