@@ -101,6 +101,44 @@ namespace ExpedienteSaludDigitalAPI.Controllers
             }
             return citasModel;
         }
+        [HttpGet("{cedula}")]
+        public List<CitaModel> Get(string cedula)
+        {
+            List<CitaModel> listaCitas = new List<CitaModel>();
+            if (ModelState.IsValid)
+            {
+                string connectionString = Configuration["ConnectionStrings:DB_Connection_Turrialba"];
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string sqlQuery = $"exec sp_bucarCitasCedula @param_CEDULA_PACIENTE = {cedula}";
+                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                    {
+                        command.CommandType = CommandType.Text;
+                        connection.Open();
+                        SqlDataReader sqlDataReader = command.ExecuteReader();
+                        while (sqlDataReader.Read())
+                        {
+                            CitaModel citas = new CitaModel();
+                            citas.ID_Cita = Int32.Parse(sqlDataReader["ID"].ToString());
+                            citas.CedulaPaciente = sqlDataReader["CEDULA_PACIENTE"].ToString();
+                            citas.Fecha = sqlDataReader["FECHA"].ToString();
+                            //Console.WriteLine("----------------"+sqlDataReader["FECHA"].ToString());
+                            citas.Hora = sqlDataReader["HORA"].ToString();
+                            citas.CentroSalud = Int32.Parse(sqlDataReader["ID_CENTRO_SALUD"].ToString());
+                            citas.Especialidad = Int32.Parse(sqlDataReader["ESPECIALIDAD"].ToString());
+                            citas.Diagnostico = sqlDataReader["DESCRIPCION_DETALLADA"].ToString();
+                            citas.NombreDoctor = sqlDataReader["NOMBRE_DOCTOR"].ToString();
+                            citas.ApellidosDoctor = sqlDataReader["APELLIDOS_DOCTOR"].ToString();
+                            listaCitas.Add(citas);
+                        }
+                        connection.Close();
+                    }
+                }
+
+            }
+            return listaCitas;
+        }
 
         // POST api/<CitaController>
         [HttpPost]
