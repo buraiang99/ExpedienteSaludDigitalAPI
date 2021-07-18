@@ -64,9 +64,9 @@ namespace ExpedienteSaludDigitalAPI.Controllers
 
         // GET api/<CitaController>/5
         [HttpGet("{cedula}")]
-        public CitaModel Get(string cedula)
+        public List<CitaModel> Get(string cedula)
         {
-            CitaModel citasModel = new CitaModel();
+            List<CitaModel> listaCitas = new List<CitaModel>();
             if (ModelState.IsValid)
             {
                 string connectionString = Configuration["ConnectionStrings:DB_Connection_Turrialba"];
@@ -80,28 +80,28 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                         connection.Open();
                         SqlDataReader sqlDataReader = command.ExecuteReader();
                         CitaModel citas = new CitaModel();
-                        if (sqlDataReader.Read())
+                        while(sqlDataReader.Read())
                         {
-                            citas.ID_Cita = Int32.Parse(sqlDataReader["ID"].ToString());
-                            citas.CedulaPaciente = sqlDataReader["CEDULA_PACIENTE"].ToString();
-                            citas.Fecha = sqlDataReader["FECHA"].ToString();
+                            CitaModel temp = new CitaModel();
+                            temp.ID_Cita = Int32.Parse(sqlDataReader["ID"].ToString());
+                            temp.CedulaPaciente = sqlDataReader["CEDULA_PACIENTE"].ToString();
+                            temp.Fecha = sqlDataReader["FECHA"].ToString();
                             //Console.WriteLine("----------------"+sqlDataReader["FECHA"].ToString());
-                            citas.Hora = sqlDataReader["HORA"].ToString();
-                            citas.CentroSalud = Int32.Parse(sqlDataReader["ID_CENTRO_SALUD"].ToString());
-                            citas.Especialidad= Int32.Parse(sqlDataReader["ESPECIALIDAD"].ToString());
-                            citas.Diagnostico = sqlDataReader["DESCRIPCION_DETALLADA"].ToString();
-                            citas.NombreDoctor = sqlDataReader["NOMBRE_DOCTOR"].ToString();
-                            citas.ApellidosDoctor = sqlDataReader["APELLIDOS_DOCTOR"].ToString();
-                            citasModel = citas;
+                            temp.Hora = sqlDataReader["HORA"].ToString();
+                            temp.CentroSalud = Int32.Parse(sqlDataReader["ID_CENTRO_SALUD"].ToString());
+                            temp.Especialidad= Int32.Parse(sqlDataReader["ESPECIALIDAD"].ToString());
+                            temp.Diagnostico = sqlDataReader["DESCRIPCION_DETALLADA"].ToString();
+                            temp.NombreDoctor = sqlDataReader["NOMBRE_DOCTOR"].ToString();
+                            temp.ApellidosDoctor = sqlDataReader["APELLIDOS_DOCTOR"].ToString();
+                            listaCitas.Add(temp);
                         }
                         connection.Close();
                     }
                 }
 
             }
-            return citasModel;
+            return listaCitas;
         }
-
         // POST api/<CitaController>
         [HttpPost]
         public void Post([FromBody] string value)
