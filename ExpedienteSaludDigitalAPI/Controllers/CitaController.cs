@@ -23,6 +23,8 @@ namespace ExpedienteSaludDigitalAPI.Controllers
         }
 
         // GET: api/<CitaController>
+        //ESTO PUEDE QUE DE PROBLEMAS PORQUE SI CAMBIO EL SP HAY QUE CAMBIAR LA PAGINA WEB PORQUE
+        //ESE MISMO SP LO USAMOS EN LA WEB DE MOMENTO NO ESTOY USANDO ESTE ENTONCES SE QUEDARA ASI
         [HttpGet]
         public List<CitaModel> Get()
         {
@@ -47,8 +49,8 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                             citas.CedulaPaciente = sqlDataReader["CEDULA_PACIENTE"].ToString();
                             citas.Fecha = sqlDataReader["FECHA"].ToString();
                             citas.Hora = sqlDataReader["HORA"].ToString();
-                            citas.CentroSalud = Int32.Parse(sqlDataReader["ID_CENTRO_SALUD"].ToString());
-                            citas.Especialidad = Int32.Parse(sqlDataReader["ESPECIALIDAD"].ToString());
+                            citas.CentroSalud = sqlDataReader["ID_CENTRO_SALUD"].ToString();
+                            citas.Especialidad = sqlDataReader["ESPECIALIDAD"].ToString();
                             citas.Diagnostico = sqlDataReader["DESCRIPCION_DETALLADA"].ToString();
                             citas.NombreDoctor = " ";
                             citas.ApellidosDoctor = " ";
@@ -86,10 +88,9 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                             temp.ID_Cita = Int32.Parse(sqlDataReader["ID"].ToString());
                             temp.CedulaPaciente = sqlDataReader["CEDULA_PACIENTE"].ToString();
                             temp.Fecha = sqlDataReader["FECHA"].ToString();
-                            //Console.WriteLine("----------------"+sqlDataReader["FECHA"].ToString());
                             temp.Hora = sqlDataReader["HORA"].ToString();
-                            temp.CentroSalud = Int32.Parse(sqlDataReader["ID_CENTRO_SALUD"].ToString());
-                            temp.Especialidad= Int32.Parse(sqlDataReader["ESPECIALIDAD"].ToString());
+                            temp.CentroSalud = sqlDataReader["ID_CENTRO_SALUD"].ToString();
+                            temp.Especialidad= sqlDataReader["ESPECIALIDAD"].ToString();
                             temp.Diagnostico = sqlDataReader["DESCRIPCION_DETALLADA"].ToString();
                             temp.NombreDoctor = sqlDataReader["NOMBRE_DOCTOR"].ToString();
                             temp.ApellidosDoctor = sqlDataReader["APELLIDOS_DOCTOR"].ToString();
