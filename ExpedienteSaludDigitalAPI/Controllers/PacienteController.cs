@@ -77,7 +77,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string cedula, string nombre, int edad, string tipoSangre, string estadoCivil,int domicilio,string pass)
+        public void Post([FromBody] string cedula, string nombre, int edad, string tipoSangre, string estadoCivil, string pass)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,6 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                     $"@param_EDAD ='{edad}'," +
                     $"@param_TIPO_SANGRE ='{tipoSangre}'," +
                     $"@param_ESTADO_CIVIL ='{estadoCivil}'," +
-                    $"@param_ID_DOMICILIO = '{domicilio}'," +
                     $"@param_PASS = '{pass}'";
                     using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                     {
