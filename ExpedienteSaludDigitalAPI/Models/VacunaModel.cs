@@ -15,6 +15,7 @@ namespace ExpedienteSaludDigitalAPI.Models
         public string Descripcion { get; set; }
         public string FechaAplicacion { get; set; }
         public string FechaProxima { get; set; }
+        public string CentroSalud { get; set; }
 
         public VacunaModel()
         {

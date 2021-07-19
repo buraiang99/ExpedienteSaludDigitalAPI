@@ -87,6 +87,7 @@ namespace ExpedienteSaludDigitalAPI.Controllers
                             vacuna.Descripcion = sqlDataReader["DESCRIPCION"].ToString();
                             vacuna.FechaAplicacion = sqlDataReader["FECHA_APLICACION"].ToString();
                             vacuna.FechaProxima = sqlDataReader["FECHA_PROXIMA"].ToString();
+                            vacuna.CentroSalud = sqlDataReader["ID_CENTRO_SALUD"].ToString();
                             listaVacunas.Add(vacuna);
                         }
                         connection.Close();
